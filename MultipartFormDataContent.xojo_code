@@ -5,15 +5,17 @@ Protected Class MultipartFormDataContent
 		  
 		  if name.Len > 0 and f <> nil then
 		    mNames.Append(name)
+		    mTypes.Append("")
 		    mValues.Append(f)
 		  end if
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Add(name as String, value as String)
+		Sub Add(name as String, value as String, contentType as String = "")
 		  if name.Len > 0 then
 		    mNames.Append(name)
+		    mTypes.Append(contentType)
 		    mValues.Append(value)
 		  end if
 		End Sub
@@ -33,8 +35,16 @@ Protected Class MultipartFormDataContent
 		    
 		    if mValues(i).Type = Variant.TypeString then
 		      
-		      formText = formText + "Content-Disposition: form-data; name=""" + mNames(i) + """" + CRLF + CRLF
-		      formText = formText +  mValues(i).StringValue + CRLF
+		      formText = formText + "Content-Disposition: form-data; name=""" + mNames(i) + """" + CRLF
+		      
+		      // Handle Content-Type headers if needed
+		      if mTypes(i) <> "" then
+		        formText = formText + "Content-Type: " + mTypes(i) + CRLF
+		        
+		      end
+		      
+		      // Extra CRLF to start the form body after headers
+		      formText = formText + CRLF + mValues(i).StringValue + CRLF
 		      
 		    else
 		      
@@ -103,6 +113,10 @@ Protected Class MultipartFormDataContent
 
 	#tag Property, Flags = &h21
 		Private mNames(-1) As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mTypes(-1) As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
