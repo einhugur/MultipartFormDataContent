@@ -50,16 +50,16 @@ Protected Class MultipartFormDataContent
 		      
 		      Dim bin as BinaryStream = BinaryStream.Open(FolderItem(mValues(i).ObjectValue))
 		      
-		      Dim s as String
+		      Dim s() as String
 		      
 		      while not bin.EOF
-		        s = s + bin.Read(1024 * 16)
+		        s.Add bin.Read(1024 * 16)
 		      wend
 		      
 		      bin.Close()
 		      
 		      formText = formText + "Content-Disposition: form-data; name=""" + mNames(i) + """; filename=""" + FolderItem(mValues(i).ObjectValue).Name + """" + CRLF + CRLF
-		      formText = formText +  s + CRLF
+		      formText = formText +  string.FromArray(s, "") + CRLF
 		      
 		    end if
 		  next
@@ -70,6 +70,7 @@ Protected Class MultipartFormDataContent
 		  
 		  
 		  uc.SetRequestContent(formText, "")
+		  
 		End Sub
 	#tag EndMethod
 
@@ -129,7 +130,9 @@ Protected Class MultipartFormDataContent
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -137,12 +140,15 @@ Protected Class MultipartFormDataContent
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -150,6 +156,7 @@ Protected Class MultipartFormDataContent
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -157,6 +164,7 @@ Protected Class MultipartFormDataContent
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
